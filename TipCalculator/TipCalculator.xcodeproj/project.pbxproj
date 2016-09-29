@@ -8,20 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		0C24ED211D9C55CE006DDE4B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C24ED201D9C55CE006DDE4B /* AppDelegate.swift */; };
-		0C24ED231D9C55CE006DDE4B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C24ED221D9C55CE006DDE4B /* ViewController.swift */; };
+		0C24ED231D9C55CE006DDE4B /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C24ED221D9C55CE006DDE4B /* TipViewController.swift */; };
 		0C24ED261D9C55CE006DDE4B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C24ED241D9C55CE006DDE4B /* Main.storyboard */; };
 		0C24ED281D9C55CE006DDE4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C24ED271D9C55CE006DDE4B /* Assets.xcassets */; };
 		0C24ED2B1D9C55CE006DDE4B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C24ED291D9C55CE006DDE4B /* LaunchScreen.storyboard */; };
+		0C24ED331D9D59F4006DDE4B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C24ED321D9D59F4006DDE4B /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0C24ED1D1D9C55CE006DDE4B /* TipCalculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TipCalculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C24ED201D9C55CE006DDE4B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		0C24ED221D9C55CE006DDE4B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		0C24ED221D9C55CE006DDE4B /* TipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipViewController.swift; sourceTree = "<group>"; };
 		0C24ED251D9C55CE006DDE4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0C24ED271D9C55CE006DDE4B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0C24ED2A1D9C55CE006DDE4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0C24ED2C1D9C55CE006DDE4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0C24ED321D9D59F4006DDE4B /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,8 +56,9 @@
 		0C24ED1F1D9C55CE006DDE4B /* TipCalculator */ = {
 			isa = PBXGroup;
 			children = (
+				0C24ED321D9D59F4006DDE4B /* SettingsViewController.swift */,
 				0C24ED201D9C55CE006DDE4B /* AppDelegate.swift */,
-				0C24ED221D9C55CE006DDE4B /* ViewController.swift */,
+				0C24ED221D9C55CE006DDE4B /* TipViewController.swift */,
 				0C24ED241D9C55CE006DDE4B /* Main.storyboard */,
 				0C24ED271D9C55CE006DDE4B /* Assets.xcassets */,
 				0C24ED291D9C55CE006DDE4B /* LaunchScreen.storyboard */,
@@ -135,8 +138,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C24ED231D9C55CE006DDE4B /* ViewController.swift in Sources */,
+				0C24ED231D9C55CE006DDE4B /* TipViewController.swift in Sources */,
 				0C24ED211D9C55CE006DDE4B /* AppDelegate.swift in Sources */,
+				0C24ED331D9D59F4006DDE4B /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +258,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = iancampelo.TipCalculator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -266,6 +271,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = iancampelo.TipCalculator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -288,6 +294,7 @@
 				0C24ED311D9C55CE006DDE4B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
