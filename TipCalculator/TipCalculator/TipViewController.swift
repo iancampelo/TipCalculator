@@ -10,147 +10,165 @@ import UIKit
 
 class TipViewController: UIViewController {
     
+    @IBOutlet weak var divSlider: UISlider!
     @IBOutlet weak var txtValue: UITextField!
-//    @IBOutlet weak var txtTip: UITextField!
     @IBOutlet weak var lblResult: UILabel!
+    @IBOutlet weak var lblDivided: UILabel!
+    @IBOutlet weak var lblTipResult: UILabel!
     @IBOutlet weak var tipSgControl: UISegmentedControl!
     @IBOutlet weak var resultView: UIView!
+    
+    @IBOutlet weak var lblDividedResult: UILabel!
     var currencyString = ""
-//    override func viewWillAppear(animated: Bool) {
-//        resultView.hidden = true
-//    }
+    var isValueRound = false
+    var currencySymbol = "$"
+    var currencyFormatter = NSNumberFormatter()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.toolbarValue()
-//        self.toolbarTip()
         
+        self.toolbarValue()
+        
+        divSlider.addTarget(self, action: #selector(SettingsViewController.sliderValueChanged(_:)), forControlEvents: UIControlEvents.AllEvents)
+        
+        txtValue.addTarget(self, action: #selector(TipViewController._txtValue), forControlEvents: UIControlEvents.AllEvents)
+        
+        tipSgControl.addTarget(self, action: #selector(TipViewController.sgControlTouchDown(_:)), forControlEvents: UIControlEvents.AllEvents)
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let round = defaults.boolForKey("round")
+        let minV = defaults.floatForKey("minValue")
+        let defaultV = defaults.floatForKey("defaultValue")
+        let maxV = defaults.floatForKey("maxValue")
+        
+        let locale = NSLocale.currentLocale()
+        currencySymbol = locale.objectForKey(NSLocaleCurrencySymbol)! as! String
+        txtValue.placeholder = currencySymbol
+        
+        isValueRound = round;
+        
+        if(minV > 0){
+            tipSgControl.setTitle(String(Int(minV))+"%", forSegmentAtIndex: 0)
+        }
+        if(defaultV > 0){
+            tipSgControl.setTitle(String(Int(defaultV))+"%", forSegmentAtIndex: 1)
+        }
+        if(maxV > 0){
+            tipSgControl.setTitle(String(Int(maxV))+"%", forSegmentAtIndex: 2)
+        }
+        if((Double(txtValue.text!)) != nil){
+            calc()
+        }
+        currencyFormatter = NSNumberFormatter()
+        currencyFormatter.usesGroupingSeparator = true
+        currencyFormatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+        currencyFormatter.locale = NSLocale.currentLocale()
+    }
+    
+    //Make done button above the keyboard
     func toolbarValue(){
         let toolbar = UIToolbar.init()
         toolbar.sizeToFit()
         
         toolbar.items=[
-            UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: #selector(TipViewController._txtValue)),
+            UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: #selector(TipViewController.closeKeyboard)),
             UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         ]
         
         txtValue.inputAccessoryView = toolbar
     }
 
-    
-//    func toolbarTip(){
-//        let toolbar = UIToolbar.init()
-//        toolbar.sizeToFit()
-//        
-//        toolbar.items=[
-//            UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: #selector(TipViewController._txtTip)),
-//            UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-//        ]
-//        
-//        txtTip.inputAccessoryView = toolbar
-//    }
-    
-    @IBAction func txtValueDidBegin(sender: UITextField) {
-        switch sender.text! {
-            case "0","1","2","3","4","5","6","7","8","9":
-                currencyString += sender.text!
-                formatCurrency(&currencyString)
-            default:
-                let array = Array(arrayLiteral: sender.text!)
-                var currentStringArray = Array(arrayLiteral: currencyString)
-                if array.count == 0 && currentStringArray.count != 0 {
-                    currentStringArray.removeLast()
-                    currencyString = ""
-                    for character in currentStringArray {
-                        currencyString += String(character)
-                    }
-                    formatCurrency(&currencyString)
-                }
-        }
-    }
+    //Call calculation and subview (result)
     func _txtValue(){
-        //txtTip.becomeFirstResponder()
         if((Double(txtValue.text!)) != nil){
-          //  txtTip.resignFirstResponder()
             calc()
             showResultsView()
         }
+        else{
+            clearResultView()
+        }
     }
     
+    func closeKeyboard(){
+        txtValue.resignFirstResponder()
+    }
+    
+    func clearResultView(){
+        self.resultView.alpha = 0
+        lblResult.text = ""
+    }
+    
+    //Show with animation the results view
     func showResultsView() {
-        resultView.hidden = false
-        UIView.animateWithDuration(1.0, delay: 0.0, usingSpringWithDamping: 0.3, initialSpringVelocity: 3.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-                self.resultView.transform = CGAffineTransformMakeScale(1, 1)
-            }, completion: nil)
-        
+        if(self.resultView.alpha == 0){
+            UIView.animateWithDuration(0.7, animations: {
+                self.resultView.alpha = 1
+            })
+        }
     }
-    
-//    func _txtTip(){
-//        if((Double(txtValue.text!)) == nil){
-//            txtValue.becomeFirstResponder()
-//        }
-//        else{
-//            txtTip.resignFirstResponder()
-//            calc()
-//        }
-//    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    func txtField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        
-        switch string {
-        case "0","1","2","3","4","5","6","7","8","9":
-            currencyString += string
-            formatCurrency(&currencyString)
-        default:
-            let array = Array(arrayLiteral: string)
-            var currentStringArray = Array(arrayLiteral: currencyString)
-            if array.count == 0 && currentStringArray.count != 0 {
-                currentStringArray.removeLast()
-                currencyString = ""
-                for character in currentStringArray {
-                    currencyString += String(character)
-                }
-                formatCurrency(&currencyString)
-            }
+ 
+    @IBAction func sgControlTouchDown(sender: UISegmentedControl) {
+        if((Double(txtValue.text!)) != nil){
+            calc()
+            showResultsView()
         }
-        return false
+        else{
+            clearResultView()
+        }
     }
     
-    func formatCurrency(inout string: String) {
+    @IBAction func sliderValueChanged(sender: UISlider) {
+        divSlider.continuous = false
         
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-        let locale = NSLocale.currentLocale()
-        formatter.locale = locale.objectForKey(NSLocaleCurrencyCode)! as! NSLocale
-        let numberFromField = (NSString(string: currencyString).doubleValue)/100
-        txtValue.text = formatter.stringFromNumber(numberFromField)
+        
+        
+        let value = Int(divSlider.value)
+        
+        let tValue = currencyFormatter.stringFromNumber(Double(calc()/Double(value)))
+        lblDividedResult.text = "Each one will pay \(tValue!)"
+        
+        var result = "Divided by \(value) "
+        
+        if(value <= 1){
+            result += "person"
+            lblDividedResult.hidden = true
+        }
+        else{
+            result += "persons"
+            lblDividedResult.hidden = false
+        }
+        lblDivided.text = result
     }
     
-    func calc() {
-//        let tip = Double(txtTip.text!)
-       let bill = Double(txtValue.text!)
-//        
-//        let tipResult = bill! * tip!/100
-//        
-//        let total = tipResult + bill!
-        let tip = Double(15)
+    //Method to make the calculation of the tips
+    func calc() -> Double{
+        let bill = Double(txtValue.text!)
+        var value: String = tipSgControl.titleForSegmentAtIndex(tipSgControl.selectedSegmentIndex)!
+        value = value.stringByReplacingOccurrencesOfString("%",withString: "")
         
-        let tipResult = bill! * tip/100
+        let tip = Double(value)
         
-        let total = (round(tipResult + bill!)*100)/100
-        let locale = NSLocale.currentLocale()
-        let currencySymbol = locale.objectForKey(NSLocaleCurrencySymbol)!
-        //let currencyCode = locale.objectForKey(NSLocaleCurrencyCode)!
+        let tipResult = bill! * tip!/100
         
-        //Implement a settings to round or not the value
-        lblResult.text = "Total: \(currencySymbol) \(total)"
+        var total = tipResult + bill!
+        if(isValueRound){
+            total = (round(total)*100)/100
+        }
         
+        let cValue = currencyFormatter.stringFromNumber(total)
+        lblResult.text = cValue!
+        
+        let tValue = currencyFormatter.stringFromNumber(tipResult)
+        lblTipResult.text = tValue!
+        return total
     }
-    
-
 }
 
